@@ -36,7 +36,17 @@ band_budget
 |        |expireddAt|Instant|만료일||
 
 
-## 2-2. PayBook 
+## 2-2. BudgetSnapshot
+| 도메인 | 속성 | 타입 | 설명 | 비고 |  
+|--------|------|------|------|------|
+|BudgetSnapshot|      |      |      |      |
+|              |id|Long|Budget Id|Primary Key|
+|              |clubId|Long|Club Id|Club 추적키, NotNull|
+|              |payload|String|스냅샷 데이터||
+|              |time|Instant|생성일||
+
+
+## 2-3. PayBook 
 | 도메인 | 속성 | 타입 | 설명 | 비고 |  
 |--------|------|------|------|------|
 |PayBook |      |      |      |      |
@@ -57,7 +67,7 @@ band_budget
 |            |CLOSED|모금종료||
 
 
-## 2-3. PayMember 
+## 2-4. PayMember 
 | 도메인 | 속성 | 타입 | 설명 | 비고 |  
 |--------|------|------|------|------|
 |PayMember|     |      |      |      |
@@ -205,3 +215,6 @@ band_budget
 |PayMemberService|PayMember 관련 비즈니스 로직 수행||
 |PayMemberStore|PayMember 관련 DB 접근||
 
+
+# 6. ERD
+![erd](https://github.com/user-attachments/assets/01335612-a9bc-4f61-8628-8357f262afda)
