@@ -161,3 +161,47 @@ band_budget
 |--------|------|------|------|------|
 |PayMemberConfirmed|      |      |발생 API: PayBook 만료|PayMemberEvent 상속|
 |                  |status|String|변경 상태||
+
+
+# 4. 예외
+
+| Exception | 속성 | 타입 | 설명 | 비고 |  
+|-----------|------|------|------|------|
+|BudgetNotActiveException|      |      |해당 Budget이 만료되었음을 표시|RuntimeException|
+|                        |budgetId|Long|Budget Id||
+
+
+| Exception | 속성 | 타입 | 설명 | 비고 |  
+|-----------|------|------|------|------|
+|PayBookNotInClubException|      |      |해당 Club에 포함된 PayBook이 아님을 표시|RuntimeException|
+|                         |clubId|Long|Club Id||
+|                         |payBookId|Long|PayBook Id||
+
+| Exception | 속성 | 타입 | 설명 | 비고 |  
+|-----------|------|------|------|------|
+|PayBookNotOpenedException|      |      |해당 PayBook이 만료되었음을 표시|RuntimeException|
+|                         |payBookId|Long|PayBook Id||
+|                         |status|String|현재 상태||
+
+| Exception | 속성 | 타입 | 설명 | 비고 |  
+|-----------|------|------|------|------|
+|PayBookNotClosedException|      |      |해당 PayBook이 활성 상태임을 표시|RuntimeException|
+|                         |payBookId|Long|PayBook Id||
+|                         |status|String|현재 상태||
+
+
+# 5. 주요 컴포넌트
+
+| 컴포넌트 | 설명 | 비고 |  
+|----------|------|------|
+|KafkaConsumerService|kafka 메시지 소비용 컴포넌트||
+|BudgetController|Budget 관련 엔드포인트||
+|BudgetService|Budget 관련 비즈니스 로직 수행||
+|BudgetStore|Budget 관련 DB 접근||
+|PayBookController|PayBook 관련 엔드포인트||
+|PayBookService|PayBook 관련 비즈니스 로직 수행||
+|PayBookStore|PayBook 관련 DB 접근||
+|PayMemberController|PayMember 관련 엔드포인트||
+|PayMemberService|PayMember 관련 비즈니스 로직 수행||
+|PayMemberStore|PayMember 관련 DB 접근||
+
