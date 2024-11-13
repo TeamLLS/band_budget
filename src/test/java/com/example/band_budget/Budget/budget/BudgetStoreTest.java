@@ -1,4 +1,4 @@
-package com.example.band_budget.Budget;
+package com.example.band_budget.Budget.budget;
 
 import com.example.band_budget.budget.Budget;
 import com.example.band_budget.budget.BudgetSnapshot;

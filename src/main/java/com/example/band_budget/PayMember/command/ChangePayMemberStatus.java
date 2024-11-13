@@ -1,12 +1,10 @@
 package com.example.band_budget.PayMember.command;
 
-import com.example.band_budget.PayBook.PayBook;
 import com.example.band_budget.PayMember.PayStatus;
 import com.example.band_budget.core.Command;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.kafka.common.protocol.types.Field;
 
 @Getter
 @NoArgsConstructor

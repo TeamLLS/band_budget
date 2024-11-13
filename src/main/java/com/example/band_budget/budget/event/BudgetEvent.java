@@ -30,4 +30,10 @@ public abstract class BudgetEvent {
     public String Payload(){
         return JsonUtil.toJson(this);
     }
+
+
+    //테스트용
+    public void setTime(Instant time){
+        this.time = time;
+    }
 }

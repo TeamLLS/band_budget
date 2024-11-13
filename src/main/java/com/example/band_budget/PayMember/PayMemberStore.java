@@ -26,7 +26,7 @@ public class PayMemberStore {
     }
 
     public PayMember find(Long payBookId, Long memberId){
-        return payMemberRepository.findByPayBookIdAndMemberId(payBookId, memberId).orElseThrow();
+        return payMemberRepository.findByPayBookIdAndMemberId(payBookId, memberId).orElse(null);
     }
 
     public Page<PayMember> findListByPayBookId(Long payBookId, int pageNo, int pageSize){

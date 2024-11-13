@@ -21,6 +21,7 @@ public class PayBook {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     private Long clubId;
     private String name;
     private String description;
@@ -28,6 +29,8 @@ public class PayBook {
     @NotNull
     @Enumerated(EnumType.STRING)
     private PayBookStatus status;
+
+    @NotNull
     private Integer amount;
 
     private Instant createdAt;

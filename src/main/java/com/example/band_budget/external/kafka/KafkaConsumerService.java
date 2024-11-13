@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@KafkaListener(topics = "budget-event-topic", groupId = "budget-consumer-group")
+@KafkaListener(topics = "budget-topic", groupId = "budget-consumer-group")
 public class KafkaConsumerService {
 
     private final BudgetService budgetService;

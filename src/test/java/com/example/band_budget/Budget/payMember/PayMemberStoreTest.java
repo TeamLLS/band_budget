@@ -1,4 +1,4 @@
-package com.example.band_budget.Budget;
+package com.example.band_budget.Budget.payMember;
 
 
 import com.example.band_budget.PayBook.PayBook;

@@ -9,6 +9,7 @@ import com.example.band_budget.budget.event.BudgetEvent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,8 @@ public class Budget {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotNull
     private Long clubId;
     private Integer amount;
     private Instant createdAt;
@@ -35,7 +38,7 @@ public class Budget {
     }
 
     public BudgetSnapshot snapshot(Instant time){
-        return new BudgetSnapshot(this);
+        return new BudgetSnapshot(this, time);
     }
 
     public BudgetUpdated update(UpdateBudget command){

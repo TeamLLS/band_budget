@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -29,26 +30,37 @@ public class PayMemberService {
     private final BudgetService budgetService;
 
     public Long registerPayMember(RegisterPayMember command){
-        PayBook payBook = payBookStore.find(command.getPayBookId());
+        PayMember payMember;
+        payMember = payMemberStore.find(command.getPayBookId(), command.getMemberId());
 
-        PayBookStatusAccessPolicy.isOpened(payBook);
-        PayBookClubAccessPolicy.isInClub(payBook, command.getClubId());
+        if (payMember == null){
+            PayBook payBook = payBookStore.find(command.getPayBookId());
 
-        command.setPayBook(payBook);
+            PayBookStatusAccessPolicy.isOpened(payBook);
+            PayBookClubAccessPolicy.isInClub(payBook, command.getClubId());
 
-        PayMember payMember = new PayMember(command);
-        return payMemberStore.save(command.getUsername(), payMember).getId();
+            command.setPayBook(payBook);
+
+            payMember = payMemberStore.save(command.getUsername(), new PayMember(command));
+        }
+
+        return payMember.getId();
     }
 
     public Long changePayMemberStatus(ChangePayMemberStatus command){
         PayMember payMember = payMemberStore.find(command.getPayBookId(), command.getMemberId());
+
+        if(payMember==null){
+            throw new NoSuchElementException();
+        }
+
         PayBook payBook = payMember.getPayBook();
 
         if(command.getStatus() == PayStatus.LATE_PAID && payMember.getStatus() == PayStatus.UNPAID) {
             PayBookStatusAccessPolicy.isClosed(payBook);
             payMemberStore.saveEvent(payMember.update(command));
             payMemberStore.saveEvent(payMember.confirm(new ConfirmPayMember(command.getUsername(), payBook.getId())));
-            budgetService.updateBudget(new UpdateBudget(command.getUsername(), payBook.getClubId(), payBook.getName(), payBook.getAmount()));
+            budgetService.updateBudget(new UpdateBudget(command.getUsername(), payBook.getClubId(), payBook.getName() + "-additional", payBook.getAmount()));
 
         } else if(command.getStatus() != PayStatus.LATE_PAID && payMember.getStatus() != command.getStatus()){
             PayBookStatusAccessPolicy.isOpened(payBook);
@@ -70,7 +82,7 @@ public class PayMemberService {
             pageNo++;
         }while (page.hasNext());
 
-        return pageNo;
+        return (int) page.getTotalElements();
     }
 
 

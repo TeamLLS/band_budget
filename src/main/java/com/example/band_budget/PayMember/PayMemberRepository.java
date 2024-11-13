@@ -17,4 +17,5 @@ public interface PayMemberRepository extends JpaRepository<PayMember, Long> {
 
     @Query("SELECT pm FROM PayMember pm JOIN FETCH pm.payBook pb WHERE pb.clubId =:clubId AND pm.username =:username AND pm.status <> 'EXCLUDED'")
     public Page<PayMember> findAllWithPayBookByUsername(@Param("clubId") Long clubId, @Param("username") String username, Pageable pageable);
+
 }

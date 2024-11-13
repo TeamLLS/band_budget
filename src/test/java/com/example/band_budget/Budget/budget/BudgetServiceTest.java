@@ -1,13 +1,15 @@
-package com.example.band_budget.Budget;
+package com.example.band_budget.Budget.budget;
 
 import com.example.band_budget.budget.Budget;
 import com.example.band_budget.budget.BudgetService;
 import com.example.band_budget.budget.BudgetSnapshot;
 import com.example.band_budget.budget.BudgetStore;
+import com.example.band_budget.budget.command.CloseBudget;
 import com.example.band_budget.budget.command.CreateBudget;
 import com.example.band_budget.budget.command.UpdateBudget;
 import com.example.band_budget.budget.event.BudgetUpdated;
 import com.example.band_budget.budget.event.BudgetEventJpo;
+import com.example.band_budget.budget.form.BudgetDto;
 import com.example.band_budget.budget.form.BudgetRecord;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +41,6 @@ public class BudgetServiceTest {
     Instant time;
     List<Budget> budgets;
     List<BudgetEventJpo> budgetEvents;
-    List<BudgetSnapshot> budgetSnapshots;
 
     @BeforeEach
     public void saveBudgets(){
@@ -47,7 +48,6 @@ public class BudgetServiceTest {
 
         budgets = new ArrayList<>();
         budgets.add(0, saved1);
-
 
         BudgetEventJpo savedEvent1 = new BudgetEventJpo(saved1.update(new UpdateBudget("UserA", 1L, "income1", 2000)));
         BudgetEventJpo savedEvent2 = new BudgetEventJpo(saved1.update(new UpdateBudget("UserA", 1L, "expense1", -1000)));
@@ -62,8 +62,10 @@ public class BudgetServiceTest {
         budgetEvents.add(3, savedEvent4);
         budgetEvents.add(4, savedEvent5);
 
-        time = Instant.now().plusSeconds(60);
+        time = Instant.now().plusSeconds(30);
 
+
+        Mockito.when(budgetStore.findByClubId(1L)).thenReturn(budgets.get(0));
         Mockito.when(budgetStore.findEventListByClubId(1L, time, 0, 2))
                 .thenReturn(new PageImpl<>(List.of(budgetEvents.get(0), budgetEvents.get(1)), PageRequest.of(0, 2),5));
         Mockito.when(budgetStore.findEventListByClubId(1L, time, 1, 2))
@@ -72,6 +74,34 @@ public class BudgetServiceTest {
                 .thenReturn(new PageImpl<>(List.of(budgetEvents.get(4)), PageRequest.of(2, 2),5));
     }
 
+
+    @Test
+    public void updateTest(){
+
+        int amount = budgets.get(0).getAmount();
+        UpdateBudget command = new UpdateBudget("TestManager", 1L, "test income", 10000);
+        budgetService.updateBudget(command);
+        BudgetDto find = budgetService.getBudgetInfo(command.getClubId(), null);
+
+        Assertions.assertThat(find.getAmount()).isEqualTo(amount + command.getAmount());
+    }
+
+
+    @Test
+    public void closeTest() {
+
+        Budget budget = budgets.get(0);
+
+        budgetService.closeBudget(new CloseBudget("TestManager", budget.getClubId()));
+        BudgetDto find = budgetService.getBudgetInfo(budget.getClubId(), null);
+
+        Assertions.assertThat(find)
+                .hasFieldOrPropertyWithValue("id", budget.getId())
+                .hasFieldOrPropertyWithValue("clubId", budget.getClubId())
+                .hasFieldOrPropertyWithValue("amount", budget.getAmount())
+                .hasFieldOrPropertyWithValue("active", false);
+
+    }
 
     @Test
     public void getRecordListTest(){
@@ -83,7 +113,7 @@ public class BudgetServiceTest {
         Assertions.assertThat(listB.size()).isEqualTo(2);
         Assertions.assertThat(listC.size()).isEqualTo(1);
 
-        BudgetRecord record = new BudgetRecord((BudgetUpdated) budgetEvents.get(4).toEvent());
+        BudgetRecord record = new BudgetRecord(budgetEvents.get(4).toEvent());
 
         Assertions.assertThat(listC.get(0))
                 .hasFieldOrPropertyWithValue("clubId", record.getClubId())

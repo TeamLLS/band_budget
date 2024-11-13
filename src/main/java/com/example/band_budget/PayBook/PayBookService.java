@@ -52,7 +52,7 @@ public class PayBookService {
         PayBookClubAccessPolicy.isInClub(payBook, command.getClubId());
 
         Integer num = payMemberService.confirmPayMember(new ConfirmPayMember(command.getUsername(), payBook.getId()));
-        budgetService.updateBudget(new UpdateBudget(command.getUsername(), payBook.getClubId(), payBook.getName() + "-additional", num * payBook.getAmount()));
+        budgetService.updateBudget(new UpdateBudget(command.getUsername(), payBook.getClubId(), payBook.getName(), num * payBook.getAmount()));
 
         payBookStore.saveEvent(payBook.close(command));
 

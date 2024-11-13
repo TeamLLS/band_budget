@@ -1,6 +1,7 @@
 package com.example.band_budget.PayMember;
 
 import com.example.band_budget.PayMember.form.PayBookRecord;
+import com.example.band_budget.PayMember.form.PayRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,12 @@ public class PayMemberController {
 
     @GetMapping("/{payBookId}/list")
     public ResponseEntity<?> getPayMemberList(@PathVariable Long payBookId, @RequestParam int pageNo){
-        return ResponseEntity.ok().body(payMemberService.getPayRecordList(payBookId, pageNo, 2));
+        List<PayRecord> list = payMemberService.getPayRecordList(payBookId, pageNo, 2);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/{clubId}/paybook/list")

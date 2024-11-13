@@ -26,10 +26,10 @@ public class BudgetSnapshot {
 
     private Instant time;
 
-    public BudgetSnapshot(Budget budget){
+    public BudgetSnapshot(Budget budget, Instant time){
         this.clubId = budget.getClubId();
         this.payload= JsonUtil.toJson(budget);
-        this.time=Instant.now();
+        this.time=time;
     }
 
     public Budget toBudget(){

@@ -22,7 +22,7 @@ public class PayBookController {
 
     private final PayBookService payBookService;
 
-    @GetMapping("/{clubId}")
+    @GetMapping("/{clubId}/list")
     public ResponseEntity<?> getPayBookList(@PathVariable Long clubId, @RequestParam int pageNo){
         List<PayBookItemDto> list = payBookService.getPayBookList(clubId, pageNo, 2);
 
@@ -33,7 +33,7 @@ public class PayBookController {
     }
 
     @GetMapping("/{payBookId}")
-    public ResponseEntity<?> getPayBookList(@PathVariable Long payBookId){
+    public ResponseEntity<?> getPayBook(@PathVariable Long payBookId){
         return ResponseEntity.ok().body(payBookService.getPayBookInfo(payBookId));
     }
 }

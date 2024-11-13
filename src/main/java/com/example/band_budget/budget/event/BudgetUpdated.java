@@ -22,4 +22,5 @@ public class BudgetUpdated extends BudgetEvent{
         this.description = command.getDescription();
         this.amount = command.getAmount();
     }
+
 }
