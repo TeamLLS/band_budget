@@ -11,14 +11,16 @@ import java.time.Instant;
 public abstract class PayMemberEvent {
 
     private String eventId;
+    private Long clubId;
     private Long payBookId;
     private Long memberId;
     private String triggeredBy;
     private Instant time;
 
 
-    public PayMemberEvent(String eventId, Long payBookId, Long memberId, String triggeredBy, Instant time) {
+    public PayMemberEvent(String eventId, Long clubId, Long payBookId, Long memberId, String triggeredBy, Instant time) {
         this.eventId = eventId;
+        this.clubId = clubId;
         this.payBookId = payBookId;
         this.memberId = memberId;
         this.triggeredBy = triggeredBy;

@@ -12,12 +12,9 @@ public class ClosePayBook extends Command {
 
     @NotNull
     private Long payBookId;
-    @NotNull
-    private Long clubId;
 
     public ClosePayBook(String username, Long payBookId, Long clubId) {
-        super(username);
+        super(username, clubId);
         this.payBookId = payBookId;
-        this.clubId = clubId;
     }
 }

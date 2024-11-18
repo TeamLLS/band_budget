@@ -19,7 +19,7 @@ public class ChangePayMemberStatus extends Command {
 
 
     public ChangePayMemberStatus(String username, Long payBookId, Long memberId, PayStatus status) {
-        super(username);
+        super(username, null);
         this.payBookId = payBookId;
         this.memberId = memberId;
         this.status = status;

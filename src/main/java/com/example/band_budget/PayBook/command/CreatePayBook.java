@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreatePayBook extends Command {
 
-    @NotNull
-    private Long clubId;
-
     private Integer amount;
 
     private String name;
@@ -20,8 +17,7 @@ public class CreatePayBook extends Command {
     private String description;
 
     public CreatePayBook(String username, Long clubId, Integer amount, String name, String description) {
-        super(username);
-        this.clubId = clubId;
+        super(username, clubId);
         this.name = name;
         this.description = description;
         this.amount = amount;

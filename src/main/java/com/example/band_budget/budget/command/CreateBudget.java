@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateBudget extends Command {
 
-    @NotNull
-    private Long clubId;
-
     public CreateBudget(String username, Long clubId) {
-        super(username);
-        this.clubId = clubId;
+        super(username, clubId);
     }
 }

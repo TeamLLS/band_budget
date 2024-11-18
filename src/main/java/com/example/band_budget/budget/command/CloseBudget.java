@@ -8,12 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CloseBudget extends Command {
-
-    @NotNull
-    private Long clubId;
-
     public CloseBudget(String username, Long clubId) {
-        super(username);
-        this.clubId = clubId;
+        super(username, clubId);
     }
 }

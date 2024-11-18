@@ -28,15 +28,22 @@ public abstract class Command {
 
     @NotNull
     private String username;
+    @NotNull
+    private Long clubId;
 
     public Command() {
     }
 
-    public Command(String username) {
+    public Command(String username, Long clubId) {
         this.username = username;
+        this.clubId = clubId;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public Long getClubId() {
+        return clubId;
     }
 }

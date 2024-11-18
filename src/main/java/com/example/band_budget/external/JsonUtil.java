@@ -2,6 +2,7 @@ package com.example.band_budget.external;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
@@ -12,6 +13,11 @@ public class JsonUtil {
     static {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+    }
+
+    public static ObjectNode toObjectNode(Object object){
+
+        return objectMapper.valueToTree(object);
     }
 
     public static String toJson(Object object) {

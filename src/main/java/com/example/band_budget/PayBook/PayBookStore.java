@@ -19,7 +19,7 @@ public class PayBookStore {
 
     public PayBook save(String username, PayBook payBook){
         PayBook saved = payBookRepository.save(payBook);
-        payBookEventRepository.save(new PayBookEventJpo(new PayBookCreated(username, saved)));
+        saveEvent(new PayBookCreated(username, saved));
         return saved;
     }
 

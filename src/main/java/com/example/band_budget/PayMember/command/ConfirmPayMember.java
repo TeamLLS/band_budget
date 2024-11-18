@@ -16,7 +16,7 @@ public class ConfirmPayMember extends Command {
 
 
     public ConfirmPayMember(String username, Long payBookId) {
-        super(username);
+        super(username, null);
         this.payBookId = payBookId;
     }
 }

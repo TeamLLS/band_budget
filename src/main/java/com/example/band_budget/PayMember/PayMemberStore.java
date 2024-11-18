@@ -1,10 +1,8 @@
 package com.example.band_budget.PayMember;
 
 import com.example.band_budget.PayBook.event.PayBookEventJpo;
-import com.example.band_budget.PayMember.event.PayMemberCreated;
-import com.example.band_budget.PayMember.event.PayMemberEvent;
-import com.example.band_budget.PayMember.event.PayMemberEventJpo;
-import com.example.band_budget.PayMember.event.PayMemberEventRepository;
+import com.example.band_budget.PayMember.event.*;
+import com.example.band_budget.external.kafka.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,12 +13,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PayMemberStore {
 
+    private final KafkaProducerService kafkaProducerService;
     private final PayMemberRepository payMemberRepository;
     private final PayMemberEventRepository payMemberEventRepository;
 
     public PayMember save(String username, PayMember payMember){
         PayMember saved = payMemberRepository.save(payMember);
-        payMemberEventRepository.save(new PayMemberEventJpo(new PayMemberCreated(username, payMember)));
+        saveEvent(new PayMemberCreated(username, payMember));
 
         return saved;
     }
@@ -37,7 +36,13 @@ public class PayMemberStore {
         return payMemberRepository.findAllWithPayBookByUsername(clubId, username, PageRequest.of(pageNo, pageSize));
     }
     public PayMemberEventJpo saveEvent(PayMemberEvent event){
-        return payMemberEventRepository.save(new PayMemberEventJpo(event));
+        PayMemberEventJpo saved = payMemberEventRepository.save(new PayMemberEventJpo(event));
+
+        if(event instanceof PayMemberConfirmed){
+            kafkaProducerService.sendPayMemberEventToKafka(event);
+        }
+
+        return saved;
     }
 
 

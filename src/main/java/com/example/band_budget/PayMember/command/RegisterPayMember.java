@@ -15,8 +15,6 @@ public class RegisterPayMember extends Command {
     private Long payBookId;
     private PayBook payBook; //반드시 별도 세팅
     @NotNull
-    private Long clubId;    //유효 참가 확인용
-    @NotNull
     private Long memberId;
     private String memberName;
     @NotNull
@@ -24,9 +22,8 @@ public class RegisterPayMember extends Command {
 
 
     public RegisterPayMember(String username, Long payBookId, Long clubId, Long memberId, String memberName, String profileName) {
-        super(username);
+        super(username, clubId);
         this.payBookId = payBookId;
-        this.clubId = clubId;
         this.memberId = memberId;
         this.memberName = memberName;
         this.profileName = profileName;

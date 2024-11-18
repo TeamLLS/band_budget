@@ -12,7 +12,6 @@ public abstract class BudgetEvent {
 
     private String eventId;
     private Long clubId;
-
     private String triggeredBy;
     private Instant time;
 

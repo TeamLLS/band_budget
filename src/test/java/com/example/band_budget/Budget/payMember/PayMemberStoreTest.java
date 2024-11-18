@@ -72,11 +72,11 @@ public class PayMemberStoreTest {
         payMembers.add(2, memberC);
         payMembers.add(3, memberD);
 
-        PayMemberEventJpo savedEvent1 = payMemberStore.saveEvent(memberA.update(new ChangePayMemberStatus("TestManager", payBook.getId(), 1L, PayStatus.PAID)));
+        PayMemberEventJpo savedEvent1 = payMemberStore.saveEvent(memberA.update(new ChangePayMemberStatus("TestManager", payBook.getId(), memberA.getMemberId(), PayStatus.PAID)));
         PayMemberEventJpo savedEvent2 = payMemberStore.saveEvent(memberA.confirm(new ConfirmPayMember("TestManager", payBook.getId())));
-        PayMemberEventJpo savedEvent3 = payMemberStore.saveEvent(memberB.update(new ChangePayMemberStatus("TestManager", payBook.getId(), 1L, PayStatus.LATE_PAID)));
+        PayMemberEventJpo savedEvent3 = payMemberStore.saveEvent(memberB.update(new ChangePayMemberStatus("TestManager", payBook.getId(), memberB.getMemberId(), PayStatus.LATE_PAID)));
         PayMemberEventJpo savedEvent4 = payMemberStore.saveEvent(memberB.confirm(new ConfirmPayMember("TestManager", payBook.getId())));
-        PayMemberEventJpo savedEvent5 = payMemberStore.saveEvent(memberD.update(new ChangePayMemberStatus("TestManager", payBook.getId(), 1L, PayStatus.EXCLUDED)));
+        PayMemberEventJpo savedEvent5 = payMemberStore.saveEvent(memberD.update(new ChangePayMemberStatus("TestManager", payBook.getId(), memberD.getMemberId(), PayStatus.EXCLUDED)));
 
         payMemberEvents = new ArrayList<>();
 

@@ -16,6 +16,7 @@ public class PayMemberEventJpo {
 
     @Id
     private String eventId;
+    private Long clubId;
     private Long payBookId;
     private Long memberId;
     private String triggeredBy;
@@ -26,6 +27,7 @@ public class PayMemberEventJpo {
 
     public PayMemberEventJpo(PayMemberEvent event) {
         this.eventId = event.getEventId();
+        this.clubId = event.getClubId();
         this.payBookId = event.getPayBookId();
         this.memberId = event.getMemberId();
         this.triggeredBy = event.getEventId();

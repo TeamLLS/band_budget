@@ -33,42 +33,42 @@ public class KafkaConsumerService {
     private final PayMemberService payMemberService;
 
     @KafkaHandler
-    public void consumeCreateBudget(CreateBudget command){
+    public void consumeCommand(CreateBudget command){
         budgetService.createBudget(command);
     }
 
     @KafkaHandler
-    public void consumeUpdateBudget(UpdateBudget command){
+    public void consumeCommand(UpdateBudget command){
         budgetService.updateBudget(command);
     }
 
     @KafkaHandler
-    public void consumeCloseBudget(CloseBudget command){
+    public void consumeCommand(CloseBudget command){
         budgetService.closeBudget(command);
     }
 
     @KafkaHandler
-    public void consumeCreatePayBook(CreatePayBook command){
+    public void consumeCommand(CreatePayBook command){
         payBookService.createPayBook(command);
     }
 
     @KafkaHandler
-    public void consumeCancelBudget(CancelPayBook command){
+    public void consumeCommand(CancelPayBook command){
         payBookService.cancelPayBook(command);
     }
 
     @KafkaHandler
-    public void consumeCloseBudget(ClosePayBook command){
+    public void consumeCommand(ClosePayBook command){
         payBookService.closePayBook(command);
     }
 
     @KafkaHandler
-    public void consumeRegisterPayMember(RegisterPayMember command){
+    public void consumeCommand(RegisterPayMember command){
         payMemberService.registerPayMember(command);
     }
 
     @KafkaHandler
-    public void consumeChangePayMemberStatus(ChangePayMemberStatus command){
+    public void consumeCommand(ChangePayMemberStatus command){
         payMemberService.changePayMemberStatus(command);
     }
 

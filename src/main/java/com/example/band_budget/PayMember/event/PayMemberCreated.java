@@ -16,7 +16,8 @@ public class PayMemberCreated extends PayMemberEvent{
 
 
     public PayMemberCreated(String username, PayMember payMember) {
-        super(UUID.randomUUID().toString(), payMember.getPayBook().getId(), payMember.getMemberId(), username, Instant.now());
+        super(UUID.randomUUID().toString(), payMember.getPayBook().getClubId(), payMember.getPayBook().getId(),
+                payMember.getMemberId(), username, Instant.now());
         this.username = payMember.getUsername();
         this.memberName = payMember.getMemberName();
     }

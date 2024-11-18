@@ -1,9 +1,7 @@
 package com.example.band_budget.budget;
 
-import com.example.band_budget.budget.event.BudgetCreated;
-import com.example.band_budget.budget.event.BudgetEvent;
-import com.example.band_budget.budget.event.BudgetEventJpo;
-import com.example.band_budget.budget.event.BudgetEventRepository;
+import com.example.band_budget.budget.event.*;
+import com.example.band_budget.external.kafka.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BudgetStore {
 
+    private final KafkaProducerService producerService;
     private final BudgetRepository budgetRepository;
     private final BudgetSnapshotRepository budgetSnapshotRepository;
     private final BudgetEventRepository budgetEventRepository;
@@ -24,7 +23,7 @@ public class BudgetStore {
     public Budget save(String username, Budget budget){
         Budget saved = budgetRepository.save(budget);
         budgetSnapshotRepository.save(saved.snapshot(saved.getCreatedAt()));
-        budgetEventRepository.save(new BudgetEventJpo(new BudgetCreated(username, saved)));
+        saveEvent(new BudgetCreated(username, saved));
 
         return saved;
     }
@@ -50,7 +49,13 @@ public class BudgetStore {
     }
 
     public BudgetEventJpo saveEvent(BudgetEvent event){
-        return budgetEventRepository.save(new BudgetEventJpo(event));
+        BudgetEventJpo saved = budgetEventRepository.save(new BudgetEventJpo(event));
+
+        if(event instanceof BudgetUpdated){
+            producerService.sendBudgetEventToKafka(event);
+        }
+
+        return saved;
     }
 
     public Page<BudgetEventJpo> findEventListByClubId(Long clubId, Instant time, int pageNo, int pageSize){
