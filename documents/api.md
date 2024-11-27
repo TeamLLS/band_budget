@@ -156,6 +156,7 @@ body: {
     {
       id: 장부 Id, (Long)
       name: 이름, (String)
+      createdBy: 생성자 이름, (String)
       status: 상태, (String)
       createdAt: 생성 시간 (Instant)
     },
