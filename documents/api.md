@@ -105,6 +105,7 @@ body: {
   amount: 납부 금액, (Integer)
   name: 장부 이름, (String)
   description: 설명 (String)
+  deadline: 모금 종료 시간 (Instnat, ISO 8601)
 }
 ```
 
@@ -158,6 +159,7 @@ body: {
       name: 이름, (String)
       status: 상태, (String)
       createdAt: 생성 시간 (Instant)
+      deadline: 모금 종료 시간 (Instnat, ISO 8601)
     },
     ...
   ]
@@ -179,12 +181,14 @@ header: {
 body: {
   id: 장부 id, (Long)
   clubId: 클럽 Id, (Long)
+  createdBy: 생성자 이름, (String)
   name: 이름, (String)
   description: 설명, (String)
   status: 상태, (String)
   amount: 납부 금액, (Integer)
   createdAt: 생성 시간, (Instant)
   closedAt: 만료 시간, (Instant)
+  deadline: 모금 종료 시간 (Instnat, ISO 8601)
 }
 ```
 
@@ -232,6 +236,9 @@ body: {
 header: {  
   Authorization: Bearer ${accessToken value},
 }
+body: {
+ {납부 시간} (Instnat, ISO 8601)
+}
 ```
 
 ### 응답
@@ -258,6 +265,9 @@ header: {
 header: {  
   Authorization: Bearer ${accessToken value},
 }
+body: {
+ {납부 시간} (Instnat, ISO 8601)
+}
 ```
 
 ### 응답
@@ -279,7 +289,9 @@ header: {
 
 
 ## ▶납부 대상 목록 조회
-### GET /paymember/{장부 Id}/list?pageNo={페이지 번호}
+### GET /paymember/{장부 Id}/list?unPay={true|false}&pageNo={페이지 번호}
+
+unPay=true일 경우, 미납자만 조회 (포함하지 않을 경우 자동 false)
 
 ```
 header: {  
@@ -297,7 +309,8 @@ body: {
       username: username, (String)
       memberId: 회원 Id, (Long)
       memberName: 회원 이름, (String)
-      status: 상태 (String)
+      status: 상태, (String)
+      paidAt: 납부 일자 (Instnat, ISO 8601)
     },
     ...
   ]
@@ -306,7 +319,9 @@ body: {
 
 
 ## ▶내 장부 목록 조회
-### GET /paymember/{클럽 Id}/paybook/list?pageNo={페이지 번호}
+### GET /paymember/{클럽 Id}/paybook/list?unPay={true|false}&pageNo={페이지 번호}
+
+unPay=true일 경우, 미납 장부만 조회 (포함하지 않을 경우 자동 false)
 
 ```
 header: {  
@@ -324,6 +339,7 @@ body: {
       amount: 납부 금액, (Integer)
       status: 납부 상태 (String)
       time: 장부 생성 시간 (Instant)
+      paidAt: 납부 일자 (Instnat, ISO 8601)
     },
     ...
   ]
