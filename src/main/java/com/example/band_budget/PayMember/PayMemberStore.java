@@ -28,18 +28,29 @@ public class PayMemberStore {
         return payMemberRepository.findByPayBookIdAndMemberId(payBookId, memberId).orElse(null);
     }
 
-    public Page<PayMember> findListByPayBookId(Long payBookId, int pageNo, int pageSize){
-        return payMemberRepository.findAllByPayBookId(payBookId, PageRequest.of(pageNo, pageSize));
+    public Page<PayMember> findListByPayBookId(Long payBookId, int pageNo, int pageSize, boolean unPay){
+
+        if(unPay){
+            return payMemberRepository.findUnPayByPayBookId(payBookId, PageRequest.of(pageNo, pageSize));
+        }else{
+            return payMemberRepository.findAllByPayBookId(payBookId, PageRequest.of(pageNo, pageSize));
+        }
+
     }
 
-    public Page<PayMember> findListWithPayBookByUsername(Long clubId, String username, int pageNo, int pageSize){
-        return payMemberRepository.findAllWithPayBookByUsername(clubId, username, PageRequest.of(pageNo, pageSize));
+    public Page<PayMember> findListWithPayBookByUsername(Long clubId, String username, int pageNo, int pageSize, boolean unPay){
+
+        if(unPay) {
+            return payMemberRepository.findUnPayWithPayBookByUsername(clubId, username, PageRequest.of(pageNo, pageSize));
+        }else{
+            return payMemberRepository.findAllWithPayBookByUsername(clubId, username, PageRequest.of(pageNo, pageSize));
+        }
     }
     public PayMemberEventJpo saveEvent(PayMemberEvent event){
         PayMemberEventJpo saved = payMemberEventRepository.save(new PayMemberEventJpo(event));
 
         if(event instanceof PayMemberConfirmed){
-            kafkaProducerService.sendPayMemberEventToKafka(event);
+            kafkaProducerService.sendEventToKafka(event);
         }
 
         return saved;

@@ -5,6 +5,7 @@ import com.example.band_budget.PayBook.command.ClosePayBook;
 import com.example.band_budget.PayBook.command.CreatePayBook;
 import com.example.band_budget.PayBook.event.PayBookCanceled;
 import com.example.band_budget.PayBook.event.PayBookClosed;
+import com.example.band_budget.simulation.command.CreatePayBookDummy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -33,6 +34,10 @@ public class PayBook {
     @NotNull
     private Integer amount;
 
+    private Instant deadline;
+
+    @NotNull
+    private String createdBy;
     private Instant createdAt;
     private Instant closedAt;
 
@@ -41,8 +46,22 @@ public class PayBook {
         this.name = command.getName();
         this.description = command.getDescription();
         this.amount = command.getAmount();
+        this.createdBy = command.getMemberName();
+        this.deadline = command.getDeadline();
         this.status = PayBookStatus.OPENED;
         this.createdAt = Instant.now();
+    }
+
+    public PayBook(CreatePayBookDummy command) {
+        this.clubId = command.getClubId();
+        this.name = command.getName();
+        this.description = command.getDescription();
+        this.amount = command.getAmount();
+        this.createdBy = command.getMemberName();
+        this.deadline = command.getDeadline();
+        this.status = PayBookStatus.CLOSED;
+        this.createdAt = command.getTime();
+        this.closedAt = this.deadline.plusSeconds(3600);
     }
 
     public PayBookCanceled cancel(CancelPayBook command){

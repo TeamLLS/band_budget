@@ -6,7 +6,7 @@ import com.example.band_budget.PayBook.command.CancelPayBook;
 import com.example.band_budget.PayBook.command.ClosePayBook;
 import com.example.band_budget.PayBook.command.CreatePayBook;
 import com.example.band_budget.PayMember.PayMemberService;
-import com.example.band_budget.PayMember.command.ChangePayMemberStatus;
+import com.example.band_budget.PayMember.command.UpdatePayMember;
 import com.example.band_budget.PayMember.command.RegisterPayMember;
 import com.example.band_budget.budget.BudgetService;
 import com.example.band_budget.budget.command.CloseBudget;
@@ -68,8 +68,8 @@ public class KafkaConsumerService {
     }
 
     @KafkaHandler
-    public void consumeCommand(ChangePayMemberStatus command){
-        payMemberService.changePayMemberStatus(command);
+    public void consumeCommand(UpdatePayMember command){
+        payMemberService.updatePayMember(command);
     }
 
 

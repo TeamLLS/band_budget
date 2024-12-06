@@ -16,7 +16,7 @@ public class PayMemberStatusChanged extends PayMemberEvent{
 
     public PayMemberStatusChanged(String username, PayMember payMember) {
         super(UUID.randomUUID().toString(), payMember.getPayBook().getClubId(), payMember.getPayBook().getId(),
-                payMember.getMemberId(), username, Instant.now());
+                payMember.getMemberId(), username, payMember.getPaidAt());
         this.status = payMember.getStatus();
     }
 }

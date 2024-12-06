@@ -19,8 +19,8 @@ public class PayMemberController {
     private final PayMemberService payMemberService;
 
     @GetMapping("/{payBookId}/list")
-    public ResponseEntity<?> getPayMemberList(@PathVariable Long payBookId, @RequestParam int pageNo){
-        List<PayRecord> list = payMemberService.getPayRecordList(payBookId, pageNo, 2);
+    public ResponseEntity<?> getPayMemberList(@PathVariable Long payBookId, @RequestParam int pageNo, @RequestParam(required = false) Boolean unPay){
+        List<PayRecord> list = payMemberService.getPayRecordList(payBookId, pageNo, 50, unPay);
 
         Map<String, Object> result = new HashMap<>();
         result.put("list", list);
@@ -29,8 +29,8 @@ public class PayMemberController {
     }
 
     @GetMapping("/{clubId}/paybook/list")
-    public ResponseEntity<?> getPayBookRecordList(@RequestHeader String username, @PathVariable Long clubId, @RequestParam int pageNo){
-        List<PayBookRecord> list = payMemberService.getPayBookRecordList(clubId, username, pageNo, 2);
+    public ResponseEntity<?> getPayBookRecordList(@RequestHeader String username, @PathVariable Long clubId, @RequestParam int pageNo, @RequestParam(required = false) Boolean unPay){
+        List<PayBookRecord> list = payMemberService.getPayBookRecordList(clubId, username, pageNo, 50, unPay);
 
         Map<String, Object> result = new HashMap<>();
         result.put("list", list);

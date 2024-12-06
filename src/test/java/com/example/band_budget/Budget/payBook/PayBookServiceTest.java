@@ -25,13 +25,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
-@Import({PayBookService.class, PayBookStore.class})
+@Import({PayBookService.class, PayBookStore.class, PayMemberService.class, BudgetService.class})
 public class PayBookServiceTest {
 
+    @MockBean
+    BudgetService budgetService;
+    @MockBean
+    PayMemberService payMemberService;
     @MockBean
     PayBookStore payBookStore;
 
@@ -43,9 +48,9 @@ public class PayBookServiceTest {
 
     @BeforeEach
     public void savePayBooks(){
-        PayBook saved1 = new PayBook(new CreatePayBook("TestManager", 1L, 11000, "November", "for dues1"));
-        PayBook saved2 = new PayBook(new CreatePayBook("TestManager", 1L, 10000, "October", "for dues2"));
-        PayBook saved3 = new PayBook(new CreatePayBook("TestManager", 1L, 12000, "December", "for dues3"));
+        PayBook saved1 = new PayBook(new CreatePayBook("TestUser", 1L, 11000, "TestManager", "November", "for dues1",  Instant.now()));
+        PayBook saved2 = new PayBook(new CreatePayBook("TestUser", 1L, 10000, "TestManager", "October", "for dues2",  Instant.now()));
+        PayBook saved3 = new PayBook(new CreatePayBook("TestUser", 1L, 12000, "TestManager", "December", "for dues3",  Instant.now()));
 
         payBooks = new ArrayList<>();
 

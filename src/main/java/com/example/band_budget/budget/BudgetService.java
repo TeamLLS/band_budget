@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -55,8 +56,12 @@ public class BudgetService {
             return new BudgetDto(budgetStore.findByClubId(clubId));
         }
 
-        return new BudgetDto(budgetStore.findByClubIdAndTime(clubId, time));
+        try{
+            return new BudgetDto(budgetStore.findByClubIdAndTime(clubId, time));
 
+        } catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     public List<BudgetRecord> getRecords(Long clubId, Instant time, int pageNo, int pageSize){

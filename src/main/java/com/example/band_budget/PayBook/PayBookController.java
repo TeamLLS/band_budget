@@ -24,7 +24,7 @@ public class PayBookController {
 
     @GetMapping("/{clubId}/list")
     public ResponseEntity<?> getPayBookList(@PathVariable Long clubId, @RequestParam int pageNo){
-        List<PayBookItemDto> list = payBookService.getPayBookList(clubId, pageNo, 2);
+        List<PayBookItemDto> list = payBookService.getPayBookList(clubId, pageNo, 50);
 
         Map<String, Object> result = new HashMap<>();
         result.put("list", list);

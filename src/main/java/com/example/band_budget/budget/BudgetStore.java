@@ -52,7 +52,7 @@ public class BudgetStore {
         BudgetEventJpo saved = budgetEventRepository.save(new BudgetEventJpo(event));
 
         if(event instanceof BudgetUpdated){
-            producerService.sendBudgetEventToKafka(event);
+            producerService.sendEventToKafka(event);
         }
 
         return saved;

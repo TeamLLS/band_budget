@@ -1,5 +1,6 @@
 package com.example.band_budget.PayMember.event;
 
+import com.example.band_budget.core.Event;
 import com.example.band_budget.external.JsonUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,30 +9,15 @@ import java.time.Instant;
 
 @Getter
 @NoArgsConstructor
-public abstract class PayMemberEvent {
+public abstract class PayMemberEvent extends Event {
 
-    private String eventId;
-    private Long clubId;
+
     private Long payBookId;
     private Long memberId;
-    private String triggeredBy;
-    private Instant time;
-
 
     public PayMemberEvent(String eventId, Long clubId, Long payBookId, Long memberId, String triggeredBy, Instant time) {
-        this.eventId = eventId;
-        this.clubId = clubId;
+        super(eventId, clubId, triggeredBy, time);
         this.payBookId = payBookId;
         this.memberId = memberId;
-        this.triggeredBy = triggeredBy;
-        this.time = time;
-    }
-
-    public String typeName(){
-        return this.getClass().getTypeName();
-    }
-
-    public String Payload(){
-        return JsonUtil.toJson(this);
     }
 }

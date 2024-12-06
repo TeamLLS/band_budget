@@ -13,7 +13,7 @@ public interface BudgetEventRepository extends JpaRepository<BudgetEventJpo, Str
 
     public Integer countByClubId(Long clubId);
 
-    @Query("SELECT e FROM BudgetEventJpo e WHERE e.clubId = :clubId AND e.time <= :time ORDER BY e.time ASC")
+    @Query("SELECT e FROM BudgetEventJpo e WHERE e.clubId = :clubId AND e.time <= :time ORDER BY e.time DESC")
     public Page<BudgetEventJpo> findAllByClubIdAndTime(@Param("clubId")Long clubId, @Param("time") Instant time, Pageable pageable);
 
     @Query("SELECT e FROM BudgetEventJpo e WHERE e.clubId = :clubId AND e.time > :startTime AND e.time <= :endTime ORDER BY e.time ASC")

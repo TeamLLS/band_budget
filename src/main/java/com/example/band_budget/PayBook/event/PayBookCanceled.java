@@ -11,10 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PayBookCanceled extends PayBookEvent{
 
-    private PayBookStatus status;
 
     public PayBookCanceled(String username, PayBook payBook) {
         super(UUID.randomUUID().toString(), payBook.getId(), payBook.getClubId(), username, payBook.getClosedAt());
-        this.status = PayBookStatus.CANCELED;
     }
 }

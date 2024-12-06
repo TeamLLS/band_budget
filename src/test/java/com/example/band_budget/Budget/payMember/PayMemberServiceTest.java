@@ -8,7 +8,7 @@ import com.example.band_budget.PayMember.PayMember;
 import com.example.band_budget.PayMember.PayMemberService;
 import com.example.band_budget.PayMember.PayMemberStore;
 import com.example.band_budget.PayMember.PayStatus;
-import com.example.band_budget.PayMember.command.ChangePayMemberStatus;
+import com.example.band_budget.PayMember.command.UpdatePayMember;
 import com.example.band_budget.PayMember.command.ConfirmPayMember;
 import com.example.band_budget.PayMember.command.RegisterPayMember;
 import com.example.band_budget.PayMember.event.PayMemberEventJpo;
@@ -27,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class PayMemberServiceTest {
 
     @BeforeEach
     public void savePayMembers(){
-        payBook = new PayBook(new CreatePayBook("TestManager", 1L, 11000, "November", "for dues1"));
+        payBook = new PayBook(new CreatePayBook("TestUser", 1L, 11000, "November", "TestManager", "for dues1", Instant.now()));
 
         RegisterPayMember command1 = new RegisterPayMember("TestManager", 1L, 1L, 1L, "MemberA", "UserA");
         RegisterPayMember command2 = new RegisterPayMember("TestManager", 1L, 1L, 2L, "MemberB", "UserB");
@@ -72,9 +73,9 @@ public class PayMemberServiceTest {
         payMembers.add(1, saved2);
         payMembers.add(2, saved3);
 
-        PayMemberEventJpo savedEvent1 = new PayMemberEventJpo(saved1.update(new ChangePayMemberStatus("TestManager", 1L, 1L, PayStatus.PAID)));
-        PayMemberEventJpo savedEvent2 = new PayMemberEventJpo(saved2.update(new ChangePayMemberStatus("TestManager", 1L, 2L, PayStatus.EXCLUDED)));
-        PayMemberEventJpo savedEvent3 = new PayMemberEventJpo(saved3.update(new ChangePayMemberStatus("TestManager", 1L, 2L, PayStatus.LATE_PAID)));
+        PayMemberEventJpo savedEvent1 = new PayMemberEventJpo(saved1.update(new UpdatePayMember("TestManager", 1L, 1L, PayStatus.PAID,  Instant.now().plusSeconds(10800))));
+        PayMemberEventJpo savedEvent2 = new PayMemberEventJpo(saved2.update(new UpdatePayMember("TestManager", 1L, 2L, PayStatus.EXCLUDED, Instant.now().plusSeconds(3600))));
+        PayMemberEventJpo savedEvent3 = new PayMemberEventJpo(saved3.update(new UpdatePayMember("TestManager", 1L, 2L, PayStatus.LATE_PAID, Instant.now().plusSeconds(72000))));
 
         payMemberEvents = new ArrayList<>();
         payMemberEvents.add(0, savedEvent1);
@@ -85,19 +86,19 @@ public class PayMemberServiceTest {
         Mockito.when(payMemberStore.find(1L, 2L)).thenReturn(payMembers.get(1));
         Mockito.when(payMemberStore.find(1L, 3L)).thenReturn(payMembers.get(2));
 
-        Mockito.when(payMemberStore.findListWithPayBookByUsername(1L, "UserA", 0, 2))
+        Mockito.when(payMemberStore.findListWithPayBookByUsername(1L, "UserA", 0, 2, true))
                 .thenReturn(new PageImpl<>(List.of(payMembers.get(0)), PageRequest.of(0, 2),1));
 
-        Mockito.when(payMemberStore.findListByPayBookId(1L, 0, 2))
+        Mockito.when(payMemberStore.findListByPayBookId(1L, 0, 2, true))
                 .thenReturn(new PageImpl<>(List.of(payMembers.get(0), payMembers.get(1)), PageRequest.of(0, 2),3));
-        Mockito.when(payMemberStore.findListByPayBookId(1L, 1, 2))
+        Mockito.when(payMemberStore.findListByPayBookId(1L, 1, 2, true))
                 .thenReturn(new PageImpl<>(List.of(payMembers.get(2)), PageRequest.of(1, 2),3));
 
     }
 
     @Test
     public void getBookListTest(){
-        List<PayBookRecord> list = payMemberService.getPayBookRecordList(1L, "UserA", 0, 2);
+        List<PayBookRecord> list = payMemberService.getPayBookRecordList(1L, "UserA", 0, 2, true);
 
         PayBookRecord record = new PayBookRecord(payMembers.get(0));
 
@@ -106,14 +107,14 @@ public class PayMemberServiceTest {
                 .hasFieldOrPropertyWithValue("payBookId", record.getPayBookId())
                 .hasFieldOrPropertyWithValue("name", record.getName())
                 .hasFieldOrPropertyWithValue("amount", record.getAmount())
-                .hasFieldOrPropertyWithValue("payStatus", record.getStatus())
-                .hasFieldOrPropertyWithValue("time", record.getTime());
+                .hasFieldOrPropertyWithValue("payStatus", record.getPayStatus())
+                .hasFieldOrPropertyWithValue("deadline", record.getDeadline());
     }
 
     @Test
     public void getListTest(){
-        List<PayRecord> listA = payMemberService.getPayRecordList(1L, 0, 2);
-        List<PayRecord> listB = payMemberService.getPayRecordList(1L, 1, 2);
+        List<PayRecord> listA = payMemberService.getPayRecordList(1L, 0, 2, null);
+        List<PayRecord> listB = payMemberService.getPayRecordList(1L, 1, 2, null);
 
         PayRecord record = new PayRecord(payMembers.get(2));
 
@@ -130,13 +131,13 @@ public class PayMemberServiceTest {
 
     @Test
     public void changeStatusTest(){
-        List<PayRecord> listA = payMemberService.getPayRecordList(1L, 0, 2);
+        List<PayRecord> listA = payMemberService.getPayRecordList(1L, 0, 2, null);
         PayRecord recordA = listA.get(0);
         Assertions.assertThat(recordA.getStatus()).isEqualTo(PayStatus.PAID.getDisplay());
 
-        payMemberService.changePayMemberStatus(new ChangePayMemberStatus("TestManager", 1L, 1L, PayStatus.UNPAID));
+        payMemberService.updatePayMember(new UpdatePayMember("TestManager", 1L, 1L, PayStatus.UNPAID, Instant.now().plusSeconds(3600)));
 
-        List<PayRecord> listB = payMemberService.getPayRecordList(1L, 0, 2);
+        List<PayRecord> listB = payMemberService.getPayRecordList(1L, 0, 2, null);
         PayRecord recordB = listB.get(0);
         Assertions.assertThat(recordB.getStatus()).isEqualTo(PayStatus.UNPAID.getDisplay());
 

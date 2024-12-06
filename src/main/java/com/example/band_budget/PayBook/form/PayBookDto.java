@@ -15,13 +15,16 @@ public class PayBookDto {
 
     private Long clubId;
     private String name;
+
     private String description;
 
     private String status;
     private Integer amount;
 
+    private String createdBy;
     private Instant createdAt;
     private Instant closedAt;
+    private Instant deadline;
 
 
     public PayBookDto(PayBook payBook) {
@@ -31,7 +34,9 @@ public class PayBookDto {
         this.description = payBook.getDescription();
         this.status = payBook.getStatus().getDisplay();
         this.amount = payBook.getAmount();
+        this.createdBy = payBook.getCreatedBy();
         this.createdAt = payBook.getCreatedAt();
         this.closedAt = payBook.getClosedAt();
+        this.deadline = payBook.getDeadline();
     }
 }

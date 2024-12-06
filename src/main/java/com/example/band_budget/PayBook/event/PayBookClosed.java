@@ -11,10 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PayBookClosed extends PayBookEvent{
 
-    private PayBookStatus status;
-
     public PayBookClosed(String username, PayBook payBook) {
         super(UUID.randomUUID().toString(), payBook.getId(), payBook.getClubId(), username, payBook.getClosedAt());
-        this.status = PayBookStatus.CLOSED;
     }
 }

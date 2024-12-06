@@ -5,7 +5,7 @@ import com.example.band_budget.PayBook.PayBook;
 import com.example.band_budget.PayBook.PayBookStore;
 import com.example.band_budget.PayBook.policy.PayBookClubAccessPolicy;
 import com.example.band_budget.PayBook.policy.PayBookStatusAccessPolicy;
-import com.example.band_budget.PayMember.command.ChangePayMemberStatus;
+import com.example.band_budget.PayMember.command.UpdatePayMember;
 import com.example.band_budget.PayMember.command.ConfirmPayMember;
 import com.example.band_budget.PayMember.command.RegisterPayMember;
 import com.example.band_budget.PayMember.form.PayBookRecord;
@@ -47,7 +47,7 @@ public class PayMemberService {
         return payMember.getId();
     }
 
-    public Long changePayMemberStatus(ChangePayMemberStatus command){
+    public Long updatePayMember(UpdatePayMember command){
         PayMember payMember = payMemberStore.find(command.getPayBookId(), command.getMemberId());
 
         if(payMember==null){
@@ -61,7 +61,6 @@ public class PayMemberService {
             payMemberStore.saveEvent(payMember.update(command));
             payMemberStore.saveEvent(payMember.confirm(new ConfirmPayMember(command.getUsername(), payBook.getId())));
             budgetService.updateBudget(new UpdateBudget(command.getUsername(), payBook.getClubId(), payBook.getName() + "-additional", payBook.getAmount()));
-
         } else if(command.getStatus() != PayStatus.LATE_PAID && payMember.getStatus() != command.getStatus()){
             PayBookStatusAccessPolicy.isOpened(payBook);
             payMemberStore.saveEvent(payMember.update(command));
@@ -76,7 +75,7 @@ public class PayMemberService {
         int pageNo=0;
 
         do{
-            page = payMemberStore.findListByPayBookId(command.getPayBookId(), pageNo, 2);
+            page = payMemberStore.findListByPayBookId(command.getPayBookId(), pageNo, 50, true);
             page.getContent().forEach(p -> payMemberStore.saveEvent(p.confirm(command)));
 
             pageNo++;
@@ -87,14 +86,23 @@ public class PayMemberService {
 
 
     @Transactional(readOnly = true)
-    public List<PayRecord> getPayRecordList(Long payBookId, int pageNo, int pageSize){
-        return payMemberStore.findListByPayBookId(payBookId, pageNo, pageSize).getContent()
+    public List<PayRecord> getPayRecordList(Long payBookId, int pageNo, int pageSize, Boolean unPay){
+        if(unPay==null){
+            unPay = false;
+        }
+
+        return payMemberStore.findListByPayBookId(payBookId, pageNo, pageSize, unPay).getContent()
                 .stream().map(PayRecord::new).toList();
     }
 
+
     @Transactional(readOnly = true)
-    public List<PayBookRecord> getPayBookRecordList(Long clubId, String username, int pageNo, int pageSize){
-        return payMemberStore.findListWithPayBookByUsername(clubId, username, pageNo, pageSize).getContent()
+    public List<PayBookRecord> getPayBookRecordList(Long clubId, String username, int pageNo, int pageSize, Boolean unPay){
+        if(unPay==null){
+            unPay = false;
+        }
+
+        return payMemberStore.findListWithPayBookByUsername(clubId, username, pageNo, pageSize, unPay).getContent()
                 .stream().map(PayBookRecord::new).toList();
     }
 }

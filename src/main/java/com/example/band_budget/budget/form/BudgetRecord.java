@@ -18,30 +18,6 @@ public class BudgetRecord {
     private String username;
     private Instant time;
 
-/*
-    public BudgetRecord(BudgetIncreased event) {
-        this.clubId = event.getClubId();
-        this.description = event.getDescription();
-        this.amount = event.getAmount();
-        this.username = event.getTriggeredBy();
-        this.time = event.getTime();
-    }
-
-    public BudgetRecord(BudgetDecreased event) {
-        this.clubId = event.getClubId();
-        this.description = event.getDescription();
-        this.amount = event.getAmount();
-        this.username = event.getTriggeredBy();
-        this.time = event.getTime();
-    }
-
-    public BudgetRecord(BudgetCreated event){
-        this.clubId = event.getClubId();
-        this.description ="created";
-        this.amount = 0;
-        this.username = event.getTriggeredBy();
-        this.time = event.getTime();
-    }*/
 
     public BudgetRecord(BudgetEvent event){
         this.clubId = event.getClubId();

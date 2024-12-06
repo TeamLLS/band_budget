@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class PayBookStoreTest {
 
     @BeforeEach
     public void savePayBooks(){
-        PayBook saved1 = new PayBook(new CreatePayBook("TestManager", 1L, 2000, "TestBookA", "for TestA"));
-        PayBook saved2 = new PayBook(new CreatePayBook("TestManager", 1L, 1500, "TestBookB", "for TestB"));
-        PayBook saved3 = new PayBook(new CreatePayBook("TestManager", 1L, 3000, "TestBookC", "for TestC"));
+        PayBook saved1 = new PayBook(new CreatePayBook("TestUser", 1L,  2000, "TestManager","TestBookA", "for TestA", Instant.now()));
+        PayBook saved2 = new PayBook(new CreatePayBook("TestUser", 1L, 1500, "TestManager", "TestBookB", "for TestB", Instant.now()));
+        PayBook saved3 = new PayBook(new CreatePayBook("TestUser", 1L, 3000, "TestManager", "TestBookC", "for TestC", Instant.now()));
 
         payBookStore.save("TestManager", saved1);
         payBookStore.save("TestManager", saved2);

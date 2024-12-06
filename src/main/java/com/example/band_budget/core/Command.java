@@ -4,7 +4,7 @@ package com.example.band_budget.core;
 import com.example.band_budget.PayBook.command.CancelPayBook;
 import com.example.band_budget.PayBook.command.ClosePayBook;
 import com.example.band_budget.PayBook.command.CreatePayBook;
-import com.example.band_budget.PayMember.command.ChangePayMemberStatus;
+import com.example.band_budget.PayMember.command.UpdatePayMember;
 import com.example.band_budget.PayMember.command.RegisterPayMember;
 import com.example.band_budget.budget.command.CloseBudget;
 import com.example.band_budget.budget.command.CreateBudget;
@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotNull;
         @JsonSubTypes.Type(value = ClosePayBook.class, name = "ClosePayBook"),
         @JsonSubTypes.Type(value = CancelPayBook.class, name = "CancelPayBook"),
         @JsonSubTypes.Type(value = RegisterPayMember.class, name = "RegisterPayMember"),
-        @JsonSubTypes.Type(value = ChangePayMemberStatus.class, name = "ChangePayMemberStatus"),
+        @JsonSubTypes.Type(value = UpdatePayMember.class, name = "UpdatePayMember"),
         @JsonSubTypes.Type(value = CreateBudget.class, name = "CreateBudget"),
         @JsonSubTypes.Type(value = UpdateBudget.class, name = "UpdateBudget"),
         @JsonSubTypes.Type(value = CloseBudget.class, name = "CloseBudget"),

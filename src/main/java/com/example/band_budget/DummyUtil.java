@@ -58,8 +58,8 @@ public class DummyUtil {
             }
         }
 
-        CreatePayBook commandPB1 = new CreatePayBook("Dummy_userB", 1L, 10000, "October", "for october dues");
-        CreatePayBook commandPB2 = new CreatePayBook("Dummy_userB", 1L, 11000, "November", "for november dues");
+        CreatePayBook commandPB1 = new CreatePayBook("Dummy_userB", 1L, 10000, "TestManager", "October", "for october dues", Instant.now().plusSeconds(720000));
+        CreatePayBook commandPB2 = new CreatePayBook("Dummy_userB", 1L, 11000, "TestManager", "November", "for november dues", Instant.now().plusSeconds(1440000));
 
         PayBook pb1 = payBookRepository.save(new PayBook(commandPB1));
         PayBook pb2 = payBookRepository.save(new PayBook(commandPB2));

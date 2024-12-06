@@ -12,14 +12,14 @@ public class PayBookRecord {
     private Long payBookId;
     private String name;
     private Integer amount;
-    private String status;
-    private Instant time;
+    private String payStatus;
+    private Instant deadline;
 
     public PayBookRecord(PayMember payMember) {
         this.payBookId = payMember.getPayBook().getId();
         this.name = payMember.getPayBook().getName();
         this.amount = payMember.getPayBook().getAmount();
-        this.status = payMember.getStatus().getDisplay();
-        this.time = payMember.getPayBook().getCreatedAt();
+        this.payStatus = payMember.getStatus().getDisplay();
+        this.deadline = payMember.getPayBook().getDeadline();
     }
 }

@@ -7,11 +7,13 @@ import com.example.band_budget.budget.command.CreateBudget;
 import com.example.band_budget.budget.command.UpdateBudget;
 import com.example.band_budget.budget.event.BudgetUpdated;
 import com.example.band_budget.budget.event.BudgetEventJpo;
+import com.example.band_budget.external.kafka.KafkaProducerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
@@ -20,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
-@Import(BudgetStore.class)
+@Import({BudgetStore.class, KafkaProducerService.class})
 public class BudgetStoreTest {
+
+    @MockBean
+    KafkaProducerService kafkaProducerService;
     @Autowired
     BudgetStore budgetStore;
 
@@ -108,7 +113,7 @@ public class BudgetStoreTest {
 
         Assertions.assertThat(listA.getSize()).isEqualTo(2);
         Assertions.assertThat(listB.getSize()).isEqualTo(2);
-        Assertions.assertThat(listB).contains(budgetEvents.get(1));
-        Assertions.assertThat(listB).contains(budgetEvents.get(2));
+        Assertions.assertThat(listA).contains(budgetEvents.get(2));
+        Assertions.assertThat(listA).contains(budgetEvents.get(1));
     }
 }

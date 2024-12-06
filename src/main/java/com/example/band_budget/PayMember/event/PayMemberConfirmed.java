@@ -13,11 +13,15 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PayMemberConfirmed extends PayMemberEvent{
 
+    private Integer amount;
+    private Instant paidAt;
     private PayStatus status;
 
     public PayMemberConfirmed(String username, PayMember payMember) {
         super(UUID.randomUUID().toString(), payMember.getPayBook().getClubId(), payMember.getPayBook().getId(),
                 payMember.getMemberId(), username, Instant.now());
         this.status = payMember.getStatus();
+        this.paidAt = payMember.getPaidAt();
+        this.amount = payMember.getPayBook().getAmount();
     }
 }

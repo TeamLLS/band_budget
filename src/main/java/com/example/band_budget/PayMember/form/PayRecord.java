@@ -5,6 +5,8 @@ import com.example.band_budget.PayMember.PayStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Setter
 @Getter
 public class PayRecord {
@@ -14,6 +16,7 @@ public class PayRecord {
     private String username;
     private Long memberId;
     private String memberName;
+    private Instant paidAt;
     private String status;
 
     public PayRecord(PayMember payMember) {
@@ -22,6 +25,7 @@ public class PayRecord {
         this.username = payMember.getUsername();
         this.memberId = payMember.getMemberId();
         this.memberName = payMember.getMemberName();
+        this.paidAt = payMember.getPaidAt();
         this.status = payMember.getStatus().getDisplay();
     }
 }
