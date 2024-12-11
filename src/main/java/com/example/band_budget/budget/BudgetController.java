@@ -33,7 +33,7 @@ public class BudgetController {
     @GetMapping("/{clubId}/records")
     public ResponseEntity<?> getRecords(@PathVariable Long clubId, @RequestParam(required = false) Instant time, @RequestParam int pageNo){
 
-        List<BudgetRecord> records = budgetService.getRecords(clubId, time, pageNo, 2);
+        List<BudgetRecord> records = budgetService.getRecords(clubId, time, pageNo, 50);
 
         Map<String, Object> result = new HashMap<>();
 
